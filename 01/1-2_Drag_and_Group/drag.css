@@ -1,11 +1,11 @@
 .container {
-  position: relative;
+  /* position: relative; */
 }
 
 .drag-element {
   position: absolute;
-  /* top: 0;
-  left: 0; */
+  top: 0;
+  left: 0;
   padding: 15px;
   background-color: rgb(224, 164, 91);
   text-align: center;

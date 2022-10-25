@@ -5,10 +5,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drag</title>
-    <link rel="stylesheet" href="drag.css">
-    <script src="drag.js" defer></script>
+    <!-- <link rel="stylesheet" href="drag.css">
+    <script src="drag.js" defer></script> -->
 </head>
 <body>
-    
+  <div id="drag-me" style="position:absolute;top:0;left:0;padding:15px;background-color:rgb(224, 164, 91);text-align:center;">Drag-me</div>
+  <script>
+    (() => {
+      const dragDiv = document.getElementById('drag-me');
+
+      let x, y, left, top;
+
+      function onMove(event) {
+        event.preventDefault();
+        dragDiv.style.left = event.clientX - x + left;
+        dragDiv.style.top = event.clientY - y + top;
+      }
+
+      // нажатие на элемент
+      dragDiv.addEventListener('mousedown', event => {
+        x = event.clientX;
+        y = event.clientY;
+
+        left = parseInt(dragDiv.style.left);
+        top = parseInt(dragDiv.style.top);
+        console.log('left', left);
+        console.log('top', top);
+        window.addEventListener('mousemove', onMove);
+      })
+      // отжатие кнопки мыши
+      document.addEventListener('mouseup', () => {
+        window.removeEventListener('mousemove', onMove);
+      })
+  }) ();
+  </script>
 </body>
 </html>

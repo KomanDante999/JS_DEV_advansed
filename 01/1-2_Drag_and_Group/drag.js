@@ -32,9 +32,12 @@
       console.log('top', top);
       window.addEventListener('mousemove', onMove);
     })
+    // отжатие кнопки мыши
+    document.addEventListener('mouseup', () => {
+      window.removeEventListener('mousemove', onMove);
+    })
 
 
 
-
-  })
-}) ()
+  });
+}) ();
