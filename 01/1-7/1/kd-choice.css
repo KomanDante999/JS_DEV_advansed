@@ -1,0 +1,118 @@
+
+.display-none {
+  display: none;
+}
+
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 5px;
+}
+
+.kd-choice {
+  position: relative;
+  width: 123px;
+  font-family: "Open Sans";
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-black);
+}
+
+.kd-choice-head {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  background-color: var(--color-background-head);
+  border: 1px solid var(--color-border);
+  padding: 10px 12px 9px 12px;
+  transition-property: background-color, border-color, color;
+  transition-duration: var(--transition-duration);
+  transition-timing-function: ease;
+}
+
+.kd-choice-head:focus {
+  border-color: var(--color-firm);
+}
+
+.kd-choice-head:hover {
+  background-color: var(--color-border);
+  border-color: var(--color-firm);
+}
+
+.kd-choice-head--caption {}
+
+.kd-choice-head--arrow {
+  color: var(--color-firm);
+  transition-property: transform;
+  transition-duration: var(--transition-duration);
+  transition-timing-function: ease;
+}
+
+.kd-choice-head--arrow.is-open {
+  transform: rotateX(-180deg);
+}
+
+
+.kd-choice-dropdown {
+  z-index: 1000;
+  position: absolute;
+  top: auto;
+  left: 0;
+  min-width: 123px;
+  margin-top: -1px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background-list);
+}
+
+.kd-choice-dropdown.is-open {
+  display: block;
+  animation-name: emergence-rotate;
+  animation-duration: var(--kd-choice-animation-duration);
+}
+
+.kd-choice-dropdown.is-close {
+  animation-name: vanish-rotate;
+  animation-duration: var(--kd-choice-animation-duration);
+}
+
+.kd-choice-dropdown--list {}
+
+.kd-choice-dropdown--item {
+  width: 100%;
+}
+
+.kd-choice-dropdown--item.is-selected {
+  display: none;
+}
+
+.kd-choice-dropdown--option {
+  width: 100%;
+  padding: 10px 12px 10px 12px;
+  transition-property: background-color, border-color;
+  transition-duration: var(--transition-duration);
+  transition-timing-function: ease;
+}
+
+.kd-choice-dropdown--option:focus {
+  background-color: var(--color-background-hover);
+}
+
+.kd-choice-dropdown--option:hover {
+  background-color: var(--color-background-hover);
+}
+
+.kd-choice-dropdown--caption {}
+
+
+
+
+
+
+
+
+
+
+
+
+

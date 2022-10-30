@@ -1,5 +1,5 @@
 (() => {
-  let OptionsName = [
+  let optionsName = [
     {
       index: 1,
       name: 'Телефон',
@@ -38,69 +38,115 @@
   </svg>`
 
 
-  function createSelect(OptionsName, classSelect) {
-    const selectValue = {value:''}
+  function createSelect(optionsName, classSelect) {
 
-    const select = document.createElement('div');
+    const select = document.createElement('form');
     select.classList.add(`${classSelect}`);
 
     // head
-    const head = document.createElement('button');
-    const caption = document.createElement('span');
+    const formValue = document.createElement('button');
+    const captionHead = document.createElement('span');
     const arrow = document.createElement('span');
 
-    head.classList.add(`${classSelect}-head`);
-    caption.classList.add(`${classSelect}-head--caption`);
+    formValue.type = 'button';
+    formValue.classList.add(`${classSelect}-head`);
+    captionHead.classList.add(`${classSelect}-head--caption`);
     arrow.classList.add(`${classSelect}-head--arrow`);
     arrow.innerHTML = arrowDown;
 
-    for (const option of OptionsName) {
-      if (option.selected === true) {
-        head.value = option.value;
-        caption.textContent = option.name;
-        selectValue.value = option.value;
+    for (const objOption of optionsName) {
+      if (objOption.selected === true) {
+        formValue.value = objOption.value;
+        captionHead.textContent = objOption.name;
       }
     }
 
-    head.append(caption, arrow)
+    formValue.addEventListener('click', () => {
+      arrow.classList.toggle('is-open');
+      dropdownContainer.classList.toggle('is-open')
+      dropdownContainer.classList.toggle('is-close')
+    })
+
+    formValue.append(captionHead, arrow);
 
     // dropdown list
     const dropdownContainer = document.createElement('div');
     const list = document.createElement('ul');
-    dropdownContainer.classList.add(`${classSelect}-dropdown`)
+    dropdownContainer.classList.add(`${classSelect}-dropdown`, 'is-close', 'display-none')
     list.classList.add(`${classSelect}-dropdown--list`)
 
-    for (const option of OptionsName) {
+    for (const objOption of optionsName) {
       const item = document.createElement('li');
-      const button = document.createElement('button');
+      const option = document.createElement('button');
       const caption = document.createElement('span');
 
       item.classList.add(`${classSelect}-dropdown--item`);
-      button.classList.add(`${classSelect}-dropdown--button`);
+      option.classList.add(`${classSelect}-dropdown--option`);
       caption.classList.add(`${classSelect}-dropdown--caption`);
 
-      if (option.selected === true) {
+      if (objOption.selected === true) {
         item.classList.add('is-selected');
       }
 
-      button.value = option.index;
-      caption.textContent = option.name;
+      caption.textContent = objOption.name;
 
+      option.addEventListener('click', () => {
+        arrow.classList.remove('is-open');
+        dropdownContainer.classList.remove('is-open');
+        dropdownContainer.classList.add('is-close');
 
-      button.append(caption);
-      item.append(button);
+        formValue.value = objOption.value;
+        captionHead.textContent = objOption.name;
+
+        const listItems = list.childNodes
+        for (const item of listItems) {
+          item.classList.remove('is-selected')
+        }
+
+        item.classList.add('is-selected')
+      })
+
+      option.append(caption);
+      item.append(option);
       list.append(item);
     }
     dropdownContainer.append(list);
 
-    select.append(head, dropdownContainer);
-    return {select, selectValue}
+    dropdownContainer.addEventListener('animationend', () => {
+      dropdownContainer.classList.toggle('display-none')
+    })
+
+    select.append(formValue, dropdownContainer);
+
+    select.addEventListener('submit', (e) => {
+      e.preventDefault();
+    });
+    select.addEventListener('click', event => {
+      event._clickOnSelect = true;
+    });
+    window.addEventListener('click', event => {
+      if (event._clickOnSelect) return;
+      arrow.classList.remove('is-open');
+      dropdownContainer.classList.remove('is-open');
+      dropdownContainer.classList.add('is-close');
+    })
+
+    return {select, formValue}
   }
 
 
 
 
-  const select = createSelect(OptionsName, 'kd-choice');
+  const select = createSelect(optionsName, 'kd-choice');
+  const select1 = createSelect(optionsName, 'kd-choice');
+  const select2 = createSelect(optionsName, 'kd-choice');
+  const select3 = createSelect(optionsName, 'kd-choice');
   const container = document.getElementById('kd-choice-0');
-  container.append(select.select);
+  container.append(select.select, select1.select, select2.select, select3.select);
+
+  select.select.addEventListener('submit', () => {
+    console.log('value', select.formValue.value);
+
+  })
+
 }) ();

@@ -1,0 +1,12 @@
+:root {
+  --color-background-head:hsla(260, 13%, 91%, 1);
+  --color-background-hover:hsla(260, 13%, 91%, 1);
+  --color-background-list:hsla(260, 14%, 96%, 1);
+  --color-border:hsla(255, 12%, 80%, 1);
+  --color-firm:hsla(256, 100%, 73%, 1);
+  --color-black: hsla(0, 0%, 20%, 1);
+
+  --kd-choice-animation-duration: 400ms;
+  --transition-duration: 400ms;
+
+}
