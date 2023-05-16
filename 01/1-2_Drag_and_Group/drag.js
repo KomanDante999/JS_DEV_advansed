@@ -1,31 +1,24 @@
 (() => {
   document.addEventListener('DOMContentLoaded', () => {
     const dragDiv = document.getElementById("drag-element");
-    let x, y, left, top;
 
-    function onMove(event) {
-      console.log('start move');
-      event.preventDefault();
-      dragDiv.style.left = event.clientX - x + left;
-      dragDiv.style.top = event.clientY - y + top;
+    function moveAt(e) {
+      dragDiv.style.left = e.pageX - dragDiv.offsetWidth /2 + 'px'
+      dragDiv.style.top = e.pageY - dragDiv.offsetHeight /2 + 'px'
     }
 
-    // нажатие на элемент
-    dragDiv.addEventListener("mousedown", (event) => {
-      x = event.clientX;
-      console.log("clientX", x);
-      y = event.clientY;
-      console.log("clientY", y);
+    dragDiv.addEventListener('dragstart', (e) => {
+      e.preventDefault()
+    })
 
-      left = parseInt(dragDiv.style.left);
-      top = parseInt(dragDiv.style.top);
-      console.log("left", left);
-      console.log("top", top);
-      window.addEventListener("mousemove", onMove);
+    dragDiv.addEventListener("mousedown", (e) => {
+      e.preventDefault()
+      moveAt(e);
+      document.addEventListener("mousemove", moveAt);
     });
-    // отжатие кнопки мыши
+
     document.addEventListener("mouseup", () => {
-      window.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mousemove", moveAt);
     });
 
 
