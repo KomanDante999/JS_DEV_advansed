@@ -3,8 +3,8 @@
 
   elem.addEventListener('click', eve => {
     console.log('Погружение...  ', idd);
-    console.log('target =  ', eve.target);
-    console.log('currentTarget = ', eve.currentTarget);// === this
+    // console.log('target =  ', eve.target);
+    // console.log('currentTarget = ', eve.currentTarget);// === this
     // eve.stopPropagation();
   }, {capture: true});
 
