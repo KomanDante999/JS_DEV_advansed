@@ -2,7 +2,7 @@
 // import { NoteList } from "./NoteList.js";
 import { ToDo } from "./ToDo.js";
 
-const $container = document.getElementById('app');
+const $container = document.getElementById("todo-mine");
 $container.classList.add('container');
 
 // const $btnAddUser = document.createElement('button')
@@ -13,6 +13,8 @@ $container.classList.add('container');
 // })
 // $container.append($btnAddUser)
 
-new ToDo($container)
+new ToDo({
+  container: $container,
+});
 
 

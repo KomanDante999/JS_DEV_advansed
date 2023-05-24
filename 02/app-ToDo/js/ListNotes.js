@@ -1,6 +1,6 @@
 import { Note } from "./Note.js";
 
-export class NoteList {
+export class ListNotes {
 
   constructor() {
     this.createLayout()
