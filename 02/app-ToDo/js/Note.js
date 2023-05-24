@@ -68,6 +68,9 @@ export class Note {
   }
   set delete(value) {
     this._delete = value
+    if (value) {
+      this.$item.remove()
+    }
   }
 }
 

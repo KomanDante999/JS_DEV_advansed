@@ -18,5 +18,9 @@ export class ListNotes {
     });
     this.arrayItems.push(this.item)
     this.$listItems.append(this.item.$item)
+
+    this.item.$deleteBatton.addEventListener('click', () => {
+      this.arrayItems.splice(this.arrayItems.findIndex(item => item.delete), 1)
+    })
   }
 };
