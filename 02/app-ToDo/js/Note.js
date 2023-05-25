@@ -7,7 +7,7 @@ export class Note {
 
     this.name = params.name;
     this.createLayout()
-    // this.done = false;
+    this.done = params.done;
 
     //* events
 
@@ -39,18 +39,6 @@ export class Note {
     this.$buttonGroup.append(this.$doneButton, this.$deleteBatton)
     this.$item.append(this.$nameSpan, this.$buttonGroup)
   }
-
-  // get name() {
-  //   return this._name
-  // }
-  // set name(value) {
-  //   this._name = value
-  //   console.log('this.$nameSpan :>> ', this.$nameSpan);
-
-  //   if (this._name) {
-  //     this.$nameSpan.innerHTML(this._name);
-  //   }
-  // }
 
   get done() {
     return this._done

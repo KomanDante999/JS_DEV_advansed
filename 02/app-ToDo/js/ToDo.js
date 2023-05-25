@@ -1,15 +1,18 @@
 import { ListNotes } from "./ListNotes.js";
+import { LocalStorageAPI } from "./LocalStorageAPI.js";
+import { ServerAPI } from "./ServerAPI.js";
 
 export class ToDo {
-  _notes = null;
-  _users = [];
-  _currentUser = "todo";
-  _newNoteName = "";
+  // _notes = null;
+  // _users = [];
+  // _currentUser = "todo";
+  // _newNoteName = "";
 
   constructor(params) {
+    this.currentId = 1;
+    this.currentHostAPI = new LocalStorageAPI()
     this.createLayout(params);
     this.createListNotes()
-
 
     //* events
     this.$input.addEventListener("input", () => {
@@ -27,6 +30,7 @@ export class ToDo {
     this.$box = document.createElement("div");
     this.$header = document.createElement("div");
     this.$title = document.createElement("h2");
+    this.$btnAPISelect = document.createElement("button");
     this.$form = document.createElement("form");
     this.$input = document.createElement("input");
     this.$btnSubmit = document.createElement("button");
@@ -45,6 +49,7 @@ export class ToDo {
     this.$box.classList.add("d-flex", "flex-column");
     this.$form.classList.add("input-group", "mb-3");
     this.$input.classList.add("form-control");
+    this.$btnAPISelect.classList.add("btn", "btn-primary");
     this.$btnSubmit.classList.add("btn", "btn-primary");
     this.$btnSubmit.disabled = true;
 
@@ -63,13 +68,17 @@ export class ToDo {
   }
 
   createListNotes() {
-    this.listNotes = new ListNotes()
+    this.listNotes = new ListNotes({
+      id: this.currentId,
+      hostAPI: this.currentHostAPI,
+    });
     this.$containerListNotes.append(this.listNotes.$listItems);
   }
 
   addNewNote() {
     this.listNotes.addItem({
       name: this.newNoteName,
+      done: false,
     });
   }
 
