@@ -7,23 +7,30 @@ export class ToDo {
   // _users = [];
   // _currentUser = "todo";
   // _newNoteName = "";
+  _currentHostAPI = "local";
 
   constructor(params) {
     this.currentId = 1;
-    this.currentHostAPI = new LocalStorageAPI()
     this.createLayout(params);
-    this.createListNotes()
+    this.currentHostAPI = this._currentHostAPI;
+    this.createListNotes();
 
     //* events
     this.$input.addEventListener("input", () => {
       this.newNoteName = this.$input.value;
-    });
+    })
+
     this.$form.addEventListener("submit", (e) => {
       e.preventDefault();
-      this.addNewNote()
-      this.newNoteName = ''
-      this.$input.value = ''
-    });
+      this.addNewNote();
+      this.newNoteName = "";
+      this.$input.value = "";
+    })
+
+    this.$btnAPISelect.addEventListener('click', () => {
+      if (this.currentHostAPI === 'local') this.currentHostAPI = "server"
+      else this.currentHostAPI = 'local'
+    })
   }
 
   createLayout(params) {
@@ -49,7 +56,7 @@ export class ToDo {
     this.$box.classList.add("d-flex", "flex-column");
     this.$form.classList.add("input-group", "mb-3");
     this.$input.classList.add("form-control");
-    this.$btnAPISelect.classList.add("btn", "btn-primary");
+    this.$btnAPISelect.classList.add("btn", "btn-outline-primary");
     this.$btnSubmit.classList.add("btn", "btn-primary");
     this.$btnSubmit.disabled = true;
 
@@ -57,7 +64,7 @@ export class ToDo {
     this.$input.placeholder = "Введите название нового дела";
     this.$btnSubmit.textContent = "Добавить дело";
 
-    this.$header.append(this.$title);
+    this.$header.append(this.$title, this.$btnAPISelect);
     this.$form.append(this.$input, this.$btnSubmit);
     this.$box.append(this.$header, this.$form, this.$containerListNotes);
 
@@ -70,7 +77,7 @@ export class ToDo {
   createListNotes() {
     this.listNotes = new ListNotes({
       id: this.currentId,
-      hostAPI: this.currentHostAPI,
+      hostAPI: this.hostAPI,
     });
     this.$containerListNotes.append(this.listNotes.$listItems);
   }
@@ -89,6 +96,40 @@ export class ToDo {
     this._newNoteName = value.trim();
     if (this._newNoteName) {
       this.$btnSubmit.disabled = false;
+    }
+  }
+
+  get currentHostAPI() {
+    return this._currentHostAPI;
+  }
+  set currentHostAPI(value) {
+    this._currentHostAPI = value
+
+    switch (value) {
+      case "local":
+        this.hostAPI = new LocalStorageAPI()
+        this.currentBtnAPIName = "Перейти на серверное хранилище";
+        break;
+      case "server":
+        this.hostAPI = new ServerAPI();
+        this.currentBtnAPIName = "Перейти на локальное хранилище";
+        break;
+
+        default:
+          this.hostAPI = new LocalStorageAPI();
+          this.currentBtnAPIName = "Перейти на серверное хранилище";
+          break;
+        }
+      }
+
+  get currentBtnAPIName() {
+    return this._currentBtnAPIName;
+  }
+  set currentBtnAPIName(value) {
+    this._currentBtnAPIName = value
+
+    if (this.$btnAPISelect) {
+      this.$btnAPISelect.textContent = this.currentBtnAPIName
     }
   }
 }

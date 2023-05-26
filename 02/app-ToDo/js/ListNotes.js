@@ -65,11 +65,14 @@ export class ListNotes {
   }
 
   createListNotes() {
-    for (const item of this.arrayData) {
-      this.addItem({
-        name: item.name,
-        done: item.done,
-      })
+    if (this.arrayData) {
+      for (const item of this.arrayData) {
+        this.addItem({
+          name: item.name,
+          done: item.done,
+        })
+      }
+
     }
   }
 
