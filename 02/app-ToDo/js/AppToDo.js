@@ -1,36 +1,38 @@
 import { ListNotes } from "./ListNotes.js";
-import { LocalStorageAPI } from "./LocalStorageAPI.js";
-import { ServerAPI } from "./ServerAPI.js";
+import { ControllerAPI } from "./ControllerAPI.js";
 
 export class ToDo {
   // _notes = null;
   // _users = [];
   // _currentUser = "todo";
   // _newNoteName = "";
-  _currentHostAPI = "local";
+  _defaultHostAPI = "local";
 
   constructor(params) {
-    this.currentId = 1;
+    this.currentOwner = "my";
     this.createLayout(params);
-    this.currentHostAPI = this._currentHostAPI;
+    if ("defaultHostAPI" in params) this.defaultHostAPI = params.defaultHostAPI;
+    else this.defaultHostAPI = this._defaultHostAPI;
+    this.controllerAPI = new ControllerAPI({
+      currentHostAPI: this.defaultHostAPI,
+      selectorAPI: this.$btnAPISelect,
+    });
+
     this.createListNotes();
 
     //* events
     this.$input.addEventListener("input", () => {
       this.newNoteName = this.$input.value;
-    })
+    });
 
     this.$form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      this.addNewNote();
+      e.preventDefault()
+      this.addNewNote()
+      this.addEventsToItems()
+      this.saveDataToHost()
       this.newNoteName = "";
       this.$input.value = "";
-    })
-
-    this.$btnAPISelect.addEventListener('click', () => {
-      if (this.currentHostAPI === 'local') this.currentHostAPI = "server"
-      else this.currentHostAPI = 'local'
-    })
+    });
   }
 
   createLayout(params) {
@@ -76,10 +78,27 @@ export class ToDo {
 
   createListNotes() {
     this.listNotes = new ListNotes({
-      id: this.currentId,
-      hostAPI: this.hostAPI,
+      owner: this.currentOwner,
+      // hostAPI: this.controllerAPI,
     });
-    this.$containerListNotes.append(this.listNotes.$listItems);
+    this.$containerListNotes.append(this.listNotes.$listItems)
+    this.getDatafromHost();
+    this.listNotes.arrayData = this.controllerAPI.getData
+    this.listNotes.createListNotes();
+    this.addEventsToItems()
+  }
+
+  getDatafromHost() {
+    this.controllerAPI.getDatafromHost({
+      key: this.currentOwner
+    });
+  }
+
+  saveDataToHost() {
+    this.controllerAPI.saveDataToHost({
+      key: this.currentOwner,
+      data: this.listNotes.arrayData,
+    });
   }
 
   addNewNote() {
@@ -87,6 +106,20 @@ export class ToDo {
       name: this.newNoteName,
       done: false,
     });
+
+  }
+
+  addEventsToItems() {
+    for (const item of this.listNotes.arrayItems) {
+      //* event remove
+      item.$deleteBatton.addEventListener("click", () => {
+        this.saveDataToHost()
+      });
+      //* event done change
+      item.$doneButton.addEventListener("click", () => {
+        this.saveDataToHost();
+      });
+    }
   }
 
   get newNoteName() {
@@ -96,40 +129,6 @@ export class ToDo {
     this._newNoteName = value.trim();
     if (this._newNoteName) {
       this.$btnSubmit.disabled = false;
-    }
-  }
-
-  get currentHostAPI() {
-    return this._currentHostAPI;
-  }
-  set currentHostAPI(value) {
-    this._currentHostAPI = value
-
-    switch (value) {
-      case "local":
-        this.hostAPI = new LocalStorageAPI()
-        this.currentBtnAPIName = "Перейти на серверное хранилище";
-        break;
-      case "server":
-        this.hostAPI = new ServerAPI();
-        this.currentBtnAPIName = "Перейти на локальное хранилище";
-        break;
-
-        default:
-          this.hostAPI = new LocalStorageAPI();
-          this.currentBtnAPIName = "Перейти на серверное хранилище";
-          break;
-        }
-      }
-
-  get currentBtnAPIName() {
-    return this._currentBtnAPIName;
-  }
-  set currentBtnAPIName(value) {
-    this._currentBtnAPIName = value
-
-    if (this.$btnAPISelect) {
-      this.$btnAPISelect.textContent = this.currentBtnAPIName
     }
   }
 }

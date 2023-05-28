@@ -8,6 +8,7 @@ export class Note {
     this.name = params.name;
     this.createLayout()
     this.done = params.done;
+    this.id = params.id
 
     //* events
 

@@ -1,14 +1,13 @@
 import { Note } from "./Note.js";
+import { GetRandomId } from "./RandomId.js";
 
 export class ListNotes {
   constructor(params) {
-    this.id = params.id;
+    this.owner = params.owner;
     this.hostAPI = params.hostAPI;
     this.arrayItems = [];
     this.arrayData = [];
     this.createLayout();
-    this.getDataFromHost();
-    this.createListNotes()
   }
 
   createLayout() {
@@ -21,11 +20,11 @@ export class ListNotes {
     this.item = new Note({
       name: params.name,
       done: params.done,
+      id: new GetRandomId().idNum,
     });
     this.arrayItems.push(this.item);
     this.$listItems.append(this.item.$item);
     this.arrayDataUpdate();
-    this.saveDataToHost();
 
     //* event remove
     this.item.$deleteBatton.addEventListener("click", () => {
@@ -34,13 +33,11 @@ export class ListNotes {
         1
       );
       this.arrayDataUpdate();
-      this.saveDataToHost();
     });
 
     //* event done change
     this.item.$doneButton.addEventListener("click", () => {
       this.arrayDataUpdate();
-      this.saveDataToHost();
     });
   }
 
@@ -50,18 +47,9 @@ export class ListNotes {
       this.arrayData.push({
         name: item.name,
         done: item.done,
+        id: item.id,
       });
     }
-  }
-
-  getDataFromHost() {
-    this.hostAPI.getData({
-      key: this.id,
-    });
-
-    this.arrayData = this.hostAPI.data;
-    //!----------------------------------------
-    console.log("this.arrayData :>> ", this.arrayData);
   }
 
   createListNotes() {
@@ -70,16 +58,9 @@ export class ListNotes {
         this.addItem({
           name: item.name,
           done: item.done,
-        })
+          id: item.id,
+        });
       }
-
     }
-  }
-
-  saveDataToHost() {
-    this.hostAPI.saveData({
-      key: this.id,
-      data: this.arrayData,
-    });
   }
 };
