@@ -47,7 +47,6 @@ export class ControllerAPI {
         this.hostAPI.sendData = params.data;
         this.hostAPI.key = params.key;
         setTimeout(async () => {
-
           await this.hostAPI.post();
         }, 0);
         break;
